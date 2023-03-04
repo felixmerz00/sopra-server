@@ -78,4 +78,16 @@ public class UserService {
       throw new ResponseStatusException(HttpStatus.BAD_REQUEST, String.format(baseErrorMessage, "name", "is"));
     }
   }
+
+  /* If the entered username does not exist or the password does not match, reject the login attempt. */
+    public User checkIfUserExistsReverse(User userToBeLoggedIn) {
+        User userByUsername = userRepository.findByUsername(userToBeLoggedIn.getUsername());
+
+        String baseErrorMessage = "Sorry, your username or password was incorrect. Please double-check your credentials";
+        if (userByUsername == null || !userByUsername.getName().equals(userToBeLoggedIn.getName()) ) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    String.format(baseErrorMessage));
+        }
+        return userByUsername;
+    }
 }
