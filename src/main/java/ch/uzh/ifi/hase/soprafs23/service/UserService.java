@@ -3,6 +3,7 @@ package ch.uzh.ifi.hase.soprafs23.service;
 import ch.uzh.ifi.hase.soprafs23.constant.UserStatus;
 import ch.uzh.ifi.hase.soprafs23.entity.User;
 import ch.uzh.ifi.hase.soprafs23.repository.UserRepository;
+import javassist.NotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -89,5 +91,16 @@ public class UserService {
                     String.format(baseErrorMessage));
         }
         return userByUsername;
+    }
+
+    public User getUserProfile(long id) {
+        Optional<User> outUser = userRepository.findById(id);
+
+        String errorMessage = "user with " + id + " was not found";
+        if(outUser.isEmpty()){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND , errorMessage);
+        }
+        // outUser is of type Optional. To get the actual User object I use the get() method.
+        return outUser.get();
     }
 }

@@ -28,19 +28,30 @@ public class UserController {
   }
 
   @GetMapping("/users")
-  @ResponseStatus(HttpStatus.OK)
-  @ResponseBody
-  public List<UserGetDTO> getAllUsers() {
-    // fetch all users in the internal representation
-    List<User> users = userService.getUsers();
-    List<UserGetDTO> userGetDTOs = new ArrayList<>();
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public List<UserGetDTO> getAllUsers() {
+        // fetch all users in the internal representation
+        List<User> users = userService.getUsers();
+        List<UserGetDTO> userGetDTOs = new ArrayList<>();
 
-    // convert each user to the API representation
-    for (User user : users) {
-      userGetDTOs.add(DTOMapper.INSTANCE.convertEntityToUserGetDTO(user));
+        // convert each user to the API representation
+        for (User user : users) {
+            userGetDTOs.add(DTOMapper.INSTANCE.convertEntityToUserGetDTO(user));
+        }
+        return userGetDTOs;
     }
-    return userGetDTOs;
-  }
+
+    @GetMapping("/profiles")
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public UserGetDTO getUserProfile(@RequestParam(value = "id") long id) {
+        // fetch the user in the internal representation
+        User user = userService.getUserProfile(id);
+
+        // convert user to the API representation and return that
+        return DTOMapper.INSTANCE.convertEntityToUserGetDTO(user);
+    }
 
   @PostMapping("/users")
   @ResponseStatus(HttpStatus.CREATED)
