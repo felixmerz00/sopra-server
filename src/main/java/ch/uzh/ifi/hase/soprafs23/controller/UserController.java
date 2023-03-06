@@ -42,15 +42,17 @@ public class UserController {
         return userGetDTOs;
     }
 
-    @GetMapping("/profiles")
+    @GetMapping("/users/{userId}")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public UserGetDTO getUserProfile(@RequestParam(value = "id") long id) {
+    public UserGetDTO getUserProfileNew(@PathVariable Long userId){
+
         // fetch the user in the internal representation
-        User user = userService.getUserProfile(id);
+        User user = userService.getUserProfile(userId);
 
         // convert user to the API representation and return that
         return DTOMapper.INSTANCE.convertEntityToUserGetDTO(user);
+
     }
 
   @PostMapping("/users")
