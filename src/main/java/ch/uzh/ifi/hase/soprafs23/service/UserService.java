@@ -103,4 +103,32 @@ public class UserService {
         // outUser is of type Optional. To get the actual User object I use the get() method.
         return outUser.get();
     }
+
+    public User putChanges(Long userId, User userInput) {
+        User userInDatabase = userRepository.findById(userId).get();
+        // check if username was edited
+        String newUsername = userInput.getUsername();
+        if(!userInDatabase.getUsername().equals(newUsername)){
+            // Check if the new username is unique
+            checkIfUsernameUnique(newUsername);
+            userInDatabase.setUsername(newUsername);
+        }
+        // check if birthday was edited
+        if(userInDatabase.getBirthday() != userInput.getBirthday()){
+            userInDatabase.setBirthday(userInput.getBirthday());
+        }
+        userRepository.save(userInDatabase);
+        userRepository.flush();
+        return userInDatabase;
+    }
+
+    // checks if the new username is unique
+    private void checkIfUsernameUnique(String newUsername) {
+        User userByUsername = userRepository.findByUsername(newUsername);
+
+        String errorMessage = "The username provided is not unique. Therefore, the username could not be changed!";
+        if (userByUsername != null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, errorMessage);
+        }
+    }
 }
