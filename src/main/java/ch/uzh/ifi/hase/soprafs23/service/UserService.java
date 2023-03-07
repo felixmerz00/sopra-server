@@ -69,9 +69,9 @@ public class UserService {
   private void checkIfUserExists(User userToBeCreated) {
     User userByUsername = userRepository.findByUsername(userToBeCreated.getUsername());
 
-    String errorMessage = "The username provided is not unique. Therefore, the user could not be created!";
+    String errorMessage = "add User failed because username already exists";
     if (userByUsername != null) {
-      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, errorMessage);
+      throw new ResponseStatusException(HttpStatus.CONFLICT, errorMessage);
     }
   }
 
