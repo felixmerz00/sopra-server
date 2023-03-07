@@ -43,7 +43,7 @@ public class UserService {
 
   public User createUser(User newUser) {
     newUser.setToken(UUID.randomUUID().toString());
-    newUser.setStatus(UserStatus.OFFLINE);
+    newUser.setStatus(UserStatus.ONLINE);
     newUser.setCreationDate();
     checkIfUserExists(newUser);
     // saves the given entity but data is only persisted in the database once
@@ -83,6 +83,11 @@ public class UserService {
         if (userByUsername == null || !userByUsername.getPassword().equals(userToBeLoggedIn.getPassword()) ) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
                     String.format(baseErrorMessage));
+        }else{
+            userByUsername.setStatus(UserStatus.ONLINE);
+            userByUsername = userRepository.save(userByUsername);
+            userRepository.flush();
+
         }
         return userByUsername;
     }
@@ -130,6 +135,16 @@ public class UserService {
         String errorMessage = "The username provided is not unique. Therefore, the username could not be changed!";
         if (userByUsername != null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, errorMessage);
+        }
+    }
+
+    public void setOffline(Long userId) {
+        Optional<User> userByIdOptional = userRepository.findById(userId);
+        if(userByIdOptional.isPresent()){
+            User userById = userByIdOptional.get();
+            userById.setStatus(UserStatus.OFFLINE);
+            userRepository.save(userById);
+            userRepository.flush();
         }
     }
 }

@@ -94,4 +94,10 @@ public class UserController {
 
       return DTOMapper.INSTANCE.convertEntityToUserGetDTO(updatedUser);
     }
+
+    @PutMapping("/user-logouts/{userId}")
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody public void updateUser(@PathVariable Long userId) {
+      userService.setOffline(userId);
+  }
 }
