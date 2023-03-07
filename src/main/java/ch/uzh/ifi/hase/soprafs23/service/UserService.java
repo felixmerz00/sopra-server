@@ -99,7 +99,14 @@ public class UserService {
     }
 
     public User putChanges(Long userId, User userInput) {
-        User userInDatabase = userRepository.findById(userId).get();
+        Optional<User> optionalUserInDatabase = userRepository.findById(userId);
+        User userInDatabase;
+        if(optionalUserInDatabase.isPresent()){
+            userInDatabase = optionalUserInDatabase.get();
+        }else{
+            String errorMessage = "user with userId " + userId + " was not found";
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND , errorMessage);
+        }
         // check if username was edited
         String newUsername = userInput.getUsername();
         if(!userInDatabase.getUsername().equals(newUsername)){
