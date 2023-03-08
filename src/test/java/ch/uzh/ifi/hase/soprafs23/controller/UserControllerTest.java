@@ -63,20 +63,19 @@ public class UserControllerTest {
 
     // this mocks the UserService -> we define above what the userService should
     // return when getUsers() is called
-    given(userService.getUsers()).willReturn(allUsers);
+    given(userService.getUserProfile(1)).willReturn(user);
 
     // when
-    MockHttpServletRequestBuilder getRequest = get("/users").contentType(MediaType.APPLICATION_JSON);
+    MockHttpServletRequestBuilder getRequest = get("/users/1").contentType(MediaType.APPLICATION_JSON);
 
     // then
     mockMvc.perform(getRequest)
             .andExpect(status().isOk())
-            .andExpect(jsonPath("$", hasSize(1)))
-            // .andExpect(jsonPath("$[0].name", is(user.getPassword())))    // password doesn't get returned anymore
-            .andExpect(jsonPath("$[0].username", is(user.getUsername())))
-            .andExpect(jsonPath("$[0].creationDate", is(user.getCreationDate().toString())))
-            .andExpect(jsonPath("$[0].status", is(user.getStatus().toString())))
-            .andExpect((jsonPath("$[0].birthday", is(user.getBirthday().toString()))));
+            .andExpect(jsonPath("$.id", is(user.getId().intValue())))
+            .andExpect(jsonPath("$.username", is(user.getUsername())))
+            .andExpect(jsonPath("$.creationDate", is(user.getCreationDate().toString())))
+            .andExpect(jsonPath("$.status", is(user.getStatus().toString())))
+            .andExpect((jsonPath("$.birthday", is(user.getBirthday().toString()))));
   }
 
   // Test POST request where a user is created with a valid username and password
