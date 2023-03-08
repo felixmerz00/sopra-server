@@ -3,6 +3,7 @@ package ch.uzh.ifi.hase.soprafs23.controller;
 import ch.uzh.ifi.hase.soprafs23.constant.UserStatus;
 import ch.uzh.ifi.hase.soprafs23.entity.User;
 import ch.uzh.ifi.hase.soprafs23.rest.dto.UserPostDTO;
+import ch.uzh.ifi.hase.soprafs23.rest.dto.UserPutDTO;
 import ch.uzh.ifi.hase.soprafs23.service.UserService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -24,6 +25,7 @@ import java.util.List;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.BDDMockito.given;
+import static org.springframework.mock.http.server.reactive.MockServerHttpRequest.put;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -111,6 +113,66 @@ public class UserControllerTest {
         .andExpect(jsonPath("$.status", is(user.getStatus().toString())))
             .andExpect(jsonPath("$.birthday", is(user.getBirthday())));
   }
+
+
+    // Test POST request where conflict is raised
+    @Test
+    public void createUser_inValidInput_conflictRaised() throws Exception {
+
+        UserPostDTO userPostDTO = new UserPostDTO();
+        userPostDTO.setPassword("password123");
+        userPostDTO.setUsername("testUsername");
+
+        given(userService.createUser(Mockito.any())).willThrow(new ResponseStatusException(HttpStatus.CONFLICT));
+
+        // when/then -> do the request + validate the result
+        MockHttpServletRequestBuilder postRequest = post("/users")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(asJsonString(userPostDTO));
+
+        // then
+        mockMvc.perform(postRequest)
+                .andExpect(status().isConflict());
+    }
+
+
+  /*
+    // Test valid PUT request
+    @Test
+    public void editUser_validInput_userEdited() throws Exception {
+        // given
+        User user = new User();
+        user.setId(1L);
+        user.setPassword("password123");
+        user.setUsername("testUsername");
+        user.setCreationDate();
+        user.setToken("1");
+        user.setStatus(UserStatus.ONLINE);
+        user.setBirthday(null);
+
+        UserPutDTO userPutDTO = new UserPutDTO();
+        userPutDTO.setUsername("felixNew");
+        userPutDTO.setBirthday(LocalDate.parse("2000-07-06"));
+
+        given(userService.createUser(Mockito.any())).willReturn(user);
+
+        // when/then -> do the request + validate the result
+        MockHttpServletRequestBuilder putRequest = put("/users/{userId}")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(asJsonString(userPutDTO));
+
+        // then
+        mockMvc.perform(putRequest)
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.id", is(user.getId().intValue())))
+                // .andExpect(jsonPath("$.name", is(user.getPassword())))   // password doesn't get returned anymore
+                .andExpect(jsonPath("$.username", is(user.getUsername())))
+                .andExpect(jsonPath("$.creationDate", is(user.getCreationDate().toString())))
+                .andExpect(jsonPath("$.status", is(user.getStatus().toString())))
+                .andExpect(jsonPath("$.birthday", is(user.getBirthday())));
+    }
+
+   */
 
   /**
    * Helper Method to convert userPostDTO into a JSON string such that the input
