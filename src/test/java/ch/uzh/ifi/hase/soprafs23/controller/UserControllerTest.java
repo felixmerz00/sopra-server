@@ -149,7 +149,7 @@ public class UserControllerTest {
     }
 
 
-  /*
+/*
     // Test valid PUT request
     @Test
     public void editUser_validInput_userEdited() throws Exception {
@@ -157,35 +157,36 @@ public class UserControllerTest {
         User user = new User();
         user.setId(1L);
         user.setPassword("password123");
-        user.setUsername("testUsername");
+        user.setUsername("felixNew");
         user.setCreationDate();
         user.setToken("1");
         user.setStatus(UserStatus.ONLINE);
-        user.setBirthday(null);
+        user.setBirthday(LocalDate.parse("2000-07-06"));
+
+        given(userService.createUser(Mockito.any())).willReturn(user);
 
         UserPutDTO userPutDTO = new UserPutDTO();
         userPutDTO.setUsername("felixNew");
         userPutDTO.setBirthday(LocalDate.parse("2000-07-06"));
 
-        given(userService.createUser(Mockito.any())).willReturn(user);
-
         // when/then -> do the request + validate the result
-        MockHttpServletRequestBuilder putRequest = put("/users/{userId}")
+        MockHttpServletRequestBuilder putRequest = put("/users/1")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(asJsonString(userPutDTO));
 
         // then
         mockMvc.perform(putRequest)
-                .andExpect(status().isCreated())
+                .andExpect(status().isResetContent())
                 .andExpect(jsonPath("$.id", is(user.getId().intValue())))
-                // .andExpect(jsonPath("$.name", is(user.getPassword())))   // password doesn't get returned anymore
                 .andExpect(jsonPath("$.username", is(user.getUsername())))
                 .andExpect(jsonPath("$.creationDate", is(user.getCreationDate().toString())))
                 .andExpect(jsonPath("$.status", is(user.getStatus().toString())))
                 .andExpect(jsonPath("$.birthday", is(user.getBirthday())));
     }
 
-   */
+ */
+
+
 
     // Test PUT for invalid input
     /*
