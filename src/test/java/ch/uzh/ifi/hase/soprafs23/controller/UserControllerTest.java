@@ -43,6 +43,7 @@ public class UserControllerTest {
   @MockBean
   private UserService userService;
 
+  // Test request to GET all users
   @Test
   public void givenUsers_whenGetUsers_thenReturnJsonArray() throws Exception {
     // given
@@ -61,13 +62,15 @@ public class UserControllerTest {
     MockHttpServletRequestBuilder getRequest = get("/users").contentType(MediaType.APPLICATION_JSON);
 
     // then
-    mockMvc.perform(getRequest).andExpect(status().isOk())
-        .andExpect(jsonPath("$", hasSize(1)))
-        // .andExpect(jsonPath("$[0].name", is(user.getPassword())))    // password doesn't get returned anymore
-        .andExpect(jsonPath("$[0].username", is(user.getUsername())))
-        .andExpect(jsonPath("$[0].status", is(user.getStatus().toString())));
+    mockMvc.perform(getRequest)
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$", hasSize(1)))
+            // .andExpect(jsonPath("$[0].name", is(user.getPassword())))    // password doesn't get returned anymore
+            .andExpect(jsonPath("$[0].username", is(user.getUsername())))
+            .andExpect(jsonPath("$[0].status", is(user.getStatus().toString())));
   }
 
+  // Test POST request where a user is created with a valid username and password
   @Test
   public void createUser_validInput_userCreated() throws Exception {
     // given
