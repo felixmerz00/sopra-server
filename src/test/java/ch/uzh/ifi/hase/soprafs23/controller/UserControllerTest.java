@@ -17,6 +17,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
 
@@ -49,8 +50,12 @@ public class UserControllerTest {
     // given
     User user = new User();
     user.setPassword("password123");
+
+    user.setId(1L);
     user.setUsername("firstname@lastname");
+    user.setCreationDate();
     user.setStatus(UserStatus.OFFLINE);
+    user.setBirthday(LocalDate.parse("2000-07-06"));
 
     List<User> allUsers = Collections.singletonList(user);
 
@@ -67,7 +72,9 @@ public class UserControllerTest {
             .andExpect(jsonPath("$", hasSize(1)))
             // .andExpect(jsonPath("$[0].name", is(user.getPassword())))    // password doesn't get returned anymore
             .andExpect(jsonPath("$[0].username", is(user.getUsername())))
-            .andExpect(jsonPath("$[0].status", is(user.getStatus().toString())));
+            .andExpect(jsonPath("$[0].creationDate", is(user.getCreationDate().toString())))
+            .andExpect(jsonPath("$[0].status", is(user.getStatus().toString())))
+            .andExpect((jsonPath("$[0].birthday", is(user.getBirthday().toString()))));
   }
 
   // Test POST request where a user is created with a valid username and password
