@@ -25,9 +25,7 @@ import java.util.List;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.BDDMockito.given;
-import static org.springframework.mock.http.server.reactive.MockServerHttpRequest.put;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -188,6 +186,34 @@ public class UserControllerTest {
     }
 
    */
+
+    // Test PUT for invalid input
+    /*
+    @Test
+    public void editUser_inValidInput_notFoundRaised() throws Exception {
+
+        // User user = new User();
+        // user.setId(1L);
+        // user.setUsername("newfirstname@lastname");
+        // user.setBirthday(LocalDate.parse("2000-07-06"));
+
+        UserPutDTO userPutDTO = new UserPutDTO();
+        userPutDTO.setUsername("newfirstname@lastname");
+        userPutDTO.setBirthday(LocalDate.parse("2000-07-06"));
+
+        given(userService.putChanges(Mockito.anyLong(), Mockito.any())).willThrow(new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+        // when/then -> do the request + validate the result
+        MockHttpServletRequestBuilder putRequest = put("/users/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(asJsonString(userPutDTO));
+
+        // then
+        mockMvc.perform(putRequest)
+                .andExpect(status().isNotFound());
+    }
+
+     */
 
   /**
    * Helper Method to convert userPostDTO into a JSON string such that the input
