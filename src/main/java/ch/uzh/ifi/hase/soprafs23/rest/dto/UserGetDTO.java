@@ -7,7 +7,6 @@ import java.time.LocalDate;
 public class UserGetDTO {
 
   private Long id;
-  private String password;
   private String username;
   private UserStatus status;
     private LocalDate creationDate;
@@ -19,14 +18,6 @@ public class UserGetDTO {
 
   public void setId(Long id) {
     this.id = id;
-  }
-
-  public String getPassword() {
-    return password;
-  }
-
-  public void setPassword(String name) {
-    this.password = name;
   }
 
   public String getUsername() {
