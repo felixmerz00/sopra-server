@@ -13,7 +13,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -112,16 +114,17 @@ public class UserService {
             String errorMessage = "user with userId " + userId + " was not found";
             throw new ResponseStatusException(HttpStatus.NOT_FOUND , errorMessage);
         }
-        // check if username was edited
+        // check if username was edited and is unique
         String newUsername = userInput.getUsername();
-        if(!userInDatabase.getUsername().equals(newUsername)){
+        if(newUsername != null && !userInDatabase.getUsername().equals(newUsername)){
             // Check if the new username is unique
             checkIfUsernameUnique(newUsername);
             userInDatabase.setUsername(newUsername);
         }
         // check if birthday was edited
-        if(userInDatabase.getBirthday() != userInput.getBirthday()){
-            userInDatabase.setBirthday(userInput.getBirthday());
+        LocalDate newBirthday = userInput.getBirthday();
+        if(newBirthday != null && userInDatabase.getBirthday() != newBirthday){
+            userInDatabase.setBirthday(newBirthday);
         }
         userRepository.save(userInDatabase);
         userRepository.flush();

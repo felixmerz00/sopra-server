@@ -86,7 +86,6 @@ public class UserController {
     @ResponseStatus(HttpStatus.RESET_CONTENT)
     @ResponseBody
     public UserGetDTO editProfile(@PathVariable Long userId, @RequestBody UserPutDTO userPutDTO){
-        System.out.println("Hello World!");
         // convert API user to internal representation
       User userInput = DTOMapper.INSTANCE.convertUserPutDTOtoEntity(userPutDTO);
 
