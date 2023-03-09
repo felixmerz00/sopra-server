@@ -7,6 +7,7 @@ import ch.uzh.ifi.hase.soprafs23.rest.dto.UserPutDTO;
 import ch.uzh.ifi.hase.soprafs23.service.UserService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -189,7 +190,7 @@ public class UserControllerTest {
 
 
     // Test PUT for invalid input
-    /*
+
     @Test
     public void editUser_inValidInput_notFoundRaised() throws Exception {
 
@@ -214,7 +215,7 @@ public class UserControllerTest {
                 .andExpect(status().isNotFound());
     }
 
-     */
+
 
   /**
    * Helper Method to convert userPostDTO into a JSON string such that the input
@@ -226,7 +227,11 @@ public class UserControllerTest {
    */
   private String asJsonString(final Object object) {
     try {
-      return new ObjectMapper().writeValueAsString(object);
+        // TODO what is going on here?
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new JavaTimeModule());
+        return  objectMapper.writeValueAsString(object);
+      // return new ObjectMapper().writeValueAsString(object);
     } catch (JsonProcessingException e) {
       throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
           String.format("The request body could not be created.%s", e.toString()));
