@@ -150,7 +150,7 @@ public class UserControllerTest {
     }
 
 
-/*
+
     // Test valid PUT request
     @Test
     public void editUser_validInput_userEdited() throws Exception {
@@ -164,7 +164,7 @@ public class UserControllerTest {
         user.setStatus(UserStatus.ONLINE);
         user.setBirthday(LocalDate.parse("2000-07-06"));
 
-        given(userService.createUser(Mockito.any())).willReturn(user);
+        given(userService.putChanges(Mockito.anyLong(), Mockito.any())).willReturn(user);
 
         UserPutDTO userPutDTO = new UserPutDTO();
         userPutDTO.setUsername("felixNew");
@@ -177,16 +177,8 @@ public class UserControllerTest {
 
         // then
         mockMvc.perform(putRequest)
-                .andExpect(status().isResetContent())
-                .andExpect(jsonPath("$.id", is(user.getId().intValue())))
-                .andExpect(jsonPath("$.username", is(user.getUsername())))
-                .andExpect(jsonPath("$.creationDate", is(user.getCreationDate().toString())))
-                .andExpect(jsonPath("$.status", is(user.getStatus().toString())))
-                .andExpect(jsonPath("$.birthday", is(user.getBirthday())));
+                .andExpect(status().isResetContent());  // I only check for http status because the PUT function doesn't return anything else.
     }
-
- */
-
 
 
     // Test PUT for invalid input
