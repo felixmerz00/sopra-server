@@ -50,7 +50,6 @@ public class UserService {
     checkIfUserExists(newUser);
     // saves the given entity but data is only persisted in the database once
     // flush() is called
-      // System.out.println("Creation date: " + newUser.getCreationDate());
     newUser = userRepository.save(newUser);
     userRepository.flush();
 

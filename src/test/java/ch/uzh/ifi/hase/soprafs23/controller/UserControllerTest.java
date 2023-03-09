@@ -77,6 +77,7 @@ public class UserControllerTest {
             .andExpect((jsonPath("$.birthday", is(user.getBirthday().toString()))));
   }
 
+
     // Test request to GET all users
     @Test
     public void notExistingUser_whenGetUsers_notFoundRaised() throws Exception {
@@ -92,6 +93,7 @@ public class UserControllerTest {
         mockMvc.perform(getRequest)
                 .andExpect(status().isNotFound());
     }
+
 
   // Test POST request where a user is created with a valid username and password
   @Test
@@ -150,7 +152,6 @@ public class UserControllerTest {
     }
 
 
-
     // Test valid PUT request
     @Test
     public void editUser_validInput_userEdited() throws Exception {
@@ -182,14 +183,8 @@ public class UserControllerTest {
 
 
     // Test PUT for invalid input
-
     @Test
     public void editUser_inValidInput_notFoundRaised() throws Exception {
-
-        // User user = new User();
-        // user.setId(1L);
-        // user.setUsername("newfirstname@lastname");
-        // user.setBirthday(LocalDate.parse("2000-07-06"));
 
         UserPutDTO userPutDTO = new UserPutDTO();
         userPutDTO.setUsername("newfirstname@lastname");
@@ -219,7 +214,6 @@ public class UserControllerTest {
    */
   private String asJsonString(final Object object) {
     try {
-        // TODO what is going on here?
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.registerModule(new JavaTimeModule());
         return  objectMapper.writeValueAsString(object);
