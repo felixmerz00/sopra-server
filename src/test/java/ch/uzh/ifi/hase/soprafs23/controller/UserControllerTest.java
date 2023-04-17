@@ -77,7 +77,6 @@ public class UserControllerTest {
             .andExpect((jsonPath("$.birthday", is(user.getBirthday().toString()))));
   }
 
-
     // Test request to GET all users
     @Test
     public void notExistingUser_whenGetUsers_notFoundRaised() throws Exception {
